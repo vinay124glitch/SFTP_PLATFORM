@@ -2,6 +2,9 @@ import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/auth';
 import Link from 'next/link';
 
+// Force dynamic rendering — page reads cookies for session detection
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'SFTP – Society Fund Transparency Platform',
   description: 'A secure, transparent platform for managing society funds with multi-role approvals, real-time ledger, and public financial reporting.',
