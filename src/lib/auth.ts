@@ -34,14 +34,6 @@ function bufferToHex(buffer: ArrayBuffer): string {
     .join('');
 }
 
-function hexToBuffer(hex: string): ArrayBuffer {
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0; i < hex.length; i += 2) {
-    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
-  }
-  return bytes.buffer.slice(0) as ArrayBuffer;
-}
-
 export async function createSessionToken(payload: { userId: string }): Promise<string> {
   const data = JSON.stringify({
     ...payload,
@@ -54,6 +46,14 @@ export async function createSessionToken(payload: { userId: string }): Promise<s
   return `${dataB64}.${sigHex}`;
 }
 
+function hexToUint8Array(hex: string): Uint8Array<ArrayBuffer> {
+  const bytes = new Uint8Array(hex.length / 2) as Uint8Array<ArrayBuffer>;
+  for (let i = 0; i < hex.length; i += 2) {
+    bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
+  }
+  return bytes;
+}
+
 export async function verifySessionToken(token: string): Promise<{ userId: string } | null> {
   try {
     const parts = token.split('.');
@@ -63,7 +63,7 @@ export async function verifySessionToken(token: string): Promise<{ userId: strin
     const isValid = await crypto.subtle.verify(
       'HMAC',
       key,
-      hexToBuffer(sigHex),
+      hexToUint8Array(sigHex),
       new TextEncoder().encode(dataB64)
     );
     if (!isValid) return null;
