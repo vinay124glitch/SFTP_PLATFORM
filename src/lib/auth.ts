@@ -34,12 +34,12 @@ function bufferToHex(buffer: ArrayBuffer): string {
     .join('');
 }
 
-function hexToBuffer(hex: string): Uint8Array {
+function hexToBuffer(hex: string): ArrayBuffer {
   const bytes = new Uint8Array(hex.length / 2);
   for (let i = 0; i < hex.length; i += 2) {
     bytes[i / 2] = parseInt(hex.substring(i, i + 2), 16);
   }
-  return bytes;
+  return bytes.buffer.slice(0) as ArrayBuffer;
 }
 
 export async function createSessionToken(payload: { userId: string }): Promise<string> {
