@@ -3,6 +3,9 @@ import prisma from '@/lib/db';
 import Link from 'next/link';
 import { formatINR } from '@/lib/currency';
 
+// Force dynamic rendering — this page queries the DB and must not be statically generated
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Public Transparency Portal – SFTP',
   description: 'View published financial reports from student and community societies.',

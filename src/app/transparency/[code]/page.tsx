@@ -4,6 +4,9 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { formatINR } from '@/lib/currency';
 
+// Force dynamic rendering — this page queries the DB per-request
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
   const society = await prisma.society.findUnique({ where: { code } });
